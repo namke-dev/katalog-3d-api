@@ -14,10 +14,7 @@ namespace katalog_3d_api.data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<UploadModel> UploadModels { get; set; }
-
         public DbSet<UploadModelDetail> UploadModelDetails { get; set; }
-
-
 
         public KatalogContext()
         {
