@@ -14,7 +14,12 @@ builder.Services.AddDbContext<KatalogContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<GenericController<User>, UserController>();
 builder.Services.AddScoped<GenericController<UserProfile>, UserProfileController>();
-
+builder.Services.AddScoped<GenericController<UploadModelDetail>, UploadModelDetailController>();
+builder.Services.AddScoped<GenericController<UploadModel>, UploadModelController>();
+builder.Services.AddScoped<GenericController<OrderItem>, OrderItemController>();
+builder.Services.AddScoped<GenericController<Order>, OrderController>();
+builder.Services.AddScoped<GenericController<OfferedService>, OfferedServiceController>();
+builder.Services.AddScoped<GenericController<NewsArticle>, NewsArticleController>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
