@@ -1,23 +1,17 @@
 using katalog_3d_api.data;
-using Microsoft.EntityFrameworkCore;
 
 namespace katalog_3d_api.Repository
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity>(KatalogContext context) : IRepository<TEntity> where TEntity : class
     {
-        private readonly KatalogContext _context;
-
-        public Repository(KatalogContext context)
-        {
-            _context = context;
-        }
+        private readonly KatalogContext _context = context;
 
         public IQueryable<TEntity> GetAll()
         {
             return _context.Set<TEntity>().AsQueryable();
         }
 
-        public async Task<TEntity> GetByIdAsync(int id)
+        public async Task<TEntity?> GetByIdAsync(int id)
         {
             return await _context.Set<TEntity>().FindAsync(id);
         }
@@ -29,14 +23,35 @@ namespace katalog_3d_api.Repository
             return entity;
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity entity)
+        public async Task<TEntity?> UpdateAsync(int id, TEntity entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            var existingEntity = await _context.Set<TEntity>().FindAsync(id);
+
+            if (existingEntity == null)
+            {
+                return null;
+            }
+
+            // Use reflection to get the properties of TEntity and update them
+            var properties = typeof(TEntity).GetProperties();
+
+            foreach (var property in properties)
+            {
+                // Exclude the property if it's an identifier
+                if (property.Name == "Id")
+                {
+                    continue;
+                }
+                var newValue = property.GetValue(entity);
+                property.SetValue(existingEntity, newValue);
+            }
+
             await _context.SaveChangesAsync();
-            return entity;
+
+            return existingEntity;
         }
 
-        public async Task<TEntity> DeleteAsync(int id)
+        public async Task<TEntity?> DeleteAsync(int id)
         {
             var entity = await _context.Set<TEntity>().FindAsync(id);
             if (entity == null)

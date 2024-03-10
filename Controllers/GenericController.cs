@@ -43,7 +43,7 @@ namespace katalog_3d_api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] TEntity entity)
         {
-            var updatedEntity = await _repository.UpdateAsync(entity);
+            var updatedEntity = await _repository.UpdateAsync(id, entity);
             if (updatedEntity == null)
             {
                 return NotFound();
