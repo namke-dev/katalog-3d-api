@@ -5,14 +5,9 @@ namespace katalog_3d_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenericController<TEntity> : ControllerBase where TEntity : class
+    public class GenericController<TEntity>(IRepository<TEntity> repository) : ControllerBase where TEntity : class
     {
-        private readonly IRepository<TEntity> _repository;
-
-        public GenericController(IRepository<TEntity> repository)
-        {
-            _repository = repository;
-        }
+        private readonly IRepository<TEntity> _repository = repository;
 
         [HttpGet]
         public IActionResult GetAll()
