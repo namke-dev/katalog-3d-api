@@ -24,32 +24,45 @@ namespace katalog_3d_api.Migrations
 
             modelBuilder.Entity("katalog_3d_api.entities.NewsArticle", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Keyword")
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("MetaScript")
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("Publisher")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Summary")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
 

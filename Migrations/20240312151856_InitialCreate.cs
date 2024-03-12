@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -41,37 +42,20 @@ namespace katalog_3d_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
+                name: "NewsArticles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OfferedServiceId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_OfferedServices_OfferedServiceId",
-                        column: x => x.OfferedServiceId,
-                        principalTable: "OfferedServices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NewsArticles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Publisher = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(500)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Publisher = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(1000)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MetaScript = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    Keyword = table.Column<string>(type: "nvarchar(255)", nullable: true),
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -151,6 +135,33 @@ namespace katalog_3d_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OfferedServiceId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_OfferedServices_OfferedServiceId",
+                        column: x => x.OfferedServiceId,
+                        principalTable: "OfferedServices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UploadModelDetails",
                 columns: table => new
                 {
@@ -189,6 +200,11 @@ namespace katalog_3d_api.Migrations
                 column: "OfferedServiceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
@@ -219,9 +235,6 @@ namespace katalog_3d_api.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
                 name: "UploadModelDetails");
 
             migrationBuilder.DropTable(
@@ -229,6 +242,9 @@ namespace katalog_3d_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "OfferedServices");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "UploadModels");
